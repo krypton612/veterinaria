@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -19,18 +20,23 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.DimensionUIResource;
+import javax.swing.text.AbstractDocument.Content;
+import javax.swing.text.AttributeSet.ColorAttribute;
+
+import org.w3c.dom.events.Event;
+
 
 
 public class Ventana extends JFrame {
   public JPanel panel;
-  public JButton salir, iniciar, mostrar, ocultar;
-  public ActionListener one;
-  public Color face = new Color(65,103,178);
+  private JButton salir, iniciar, mostrar, ocultar;
+  private ActionListener one;
+  private Color face = new Color(65,103,178);
   //public Color face = new Color(97,97,97);
-  public Color login = new Color(84,124,188);
-
-  public Font tipoLetra = new Font("calibri",Font.PLAIN,11);
-  public int par=0;
+  private Color login = new Color(84,124,188);
+  private JLabel fondo;
+  private Font tipoLetra = new  Font("calibri",Font.PLAIN,11);
+  private int par=0;
   private String pass;
   private JTextField username;
   private JPasswordField password;
@@ -39,7 +45,7 @@ public class Ventana extends JFrame {
   public Ventana() {
     
     setSize(802,633);
-
+  
     setLocationRelativeTo(null);
 
     setMinimumSize(new DimensionUIResource(300, 300));
@@ -50,33 +56,50 @@ public class Ventana extends JFrame {
   }
   private void iniciarComponentes() {
     colocarPaneles();
+    fondoPantalla();
     colocarLabels();
-    colocarBotonesExit("\u2715",780,1);
-    colocarBotonesExit("\u25A1",758,2);
-    colocarBotonesExit("\u2013", 736,3);
+    //colocarBotonesExit("\u2715",780,1);
+    //colocarBotonesExit("\u25A1",758,2);
+    //colocarBotonesExit("\u2013", 736,3);
     colocarFormularios();
-    registrarse();
+    //registrarse();
   }
+
   private void colocarPaneles() {
     panel = new JPanel();
     
     panel.setLayout(null);
     panel.setBackground(face);
     
-    this.getContentPane().add(panel);;
+    this.getContentPane().add(panel);
   }
+
+  private void fondoPantalla(){
+    ImageIcon fondoPantalla = new ImageIcon("fondo.jpg");
+    fondo = new JLabel();
+
+    fondo.setSize(795, 620);
+    fondo.setIcon(fondoPantalla);
+    fondo.setVerticalAlignment(SwingConstants.CENTER);
+
+    fondo.setBounds(0, 0, 795, 620);
+
+
+    panel.add(fondo);
+  }
+
   private void colocarLabels(){
 
     // -----------------------------------
     JLabel esquinaIz = new JLabel();
-    esquinaIz.setText("FreeSale");
+    esquinaIz.setText("Iniciar Secion");
     esquinaIz.setBounds(12,2,100,30);
-    esquinaIz.setOpaque(true);
+    esquinaIz.setOpaque(false);
     esquinaIz.setFont(tipoLetra);
     esquinaIz.setForeground(Color.WHITE);
     esquinaIz.setBackground(face);
     esquinaIz.setLayout(null);
-    panel.add(esquinaIz);
+    fondo.add(esquinaIz);
     // ------------------------------------
     //
     // ------------------------------------
@@ -85,71 +108,14 @@ public class Ventana extends JFrame {
     JLabel conTend = new JLabel();
 
 
-    conTend.setIcon(new ImageIcon(imgToBuy.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+    conTend.setIcon(new ImageIcon(imgToBuy.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)));
     conTend.setVerticalAlignment(SwingConstants.CENTER);
 
-    conTend.setBounds(medio-25, 140, 50, 50); //Y, X
-    panel.add(conTend);
+    conTend.setBounds(medio-60, 80, 120, 120); //Y, X
+    fondo.add(conTend);
 
   }
-  private void colocarBotonesExit(String icon, int x,int number) {
-     salir = new JButton();
-     //salir.setText("\u2715");
-     salir.setText(icon);
-     if (icon == "\u2715") {
-       salir.setFont(new Font("arial",Font.PLAIN,19));
-     } else {
-       salir.setFont(new Font("arial",Font.PLAIN,15)); 
-       salir.setVerticalTextPosition(SwingConstants.CENTER);
-     }
-     salir.setBounds(x, 2, 20, 20);
-     salir.setFocusable(false);
-     salir.setVisible(true);
-     salir.setLayout(null);
-     salir.setHorizontalAlignment(SwingConstants.CENTER);
-     salir.setBorderPainted(false);
-     salir.setContentAreaFilled(true);
-     salir.setOpaque(true);
-
-     salir.setForeground(Color.WHITE);
-     salir.setBackground(face);
-
-     salir.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-     panel.add(salir);
-     if (number == 1) {
-       one = new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent ae) {
-           System.exit(0);
-         };
-       };
-     }
-     if (number == 2) {
-       one = new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent ae) {
-           //System.exit(0);
-           if (par % 2 == 0) {
-             //setExtendedState(JFrame.MAXIMIZED_BOTH);
-             par++;
-           }
-           else {
-             setExtendedState(JFrame.NORMAL);
-             par--;
-           }
-         };
-       };
-     }
-    if (number == 3) {
-       one = new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent ae) {
-           setExtendedState(JFrame.ICONIFIED);
-         };
-       };
-     }
-     salir.addActionListener(one);
-  }
+  
   private void colocarFormularios() {
     //char contra[] = new char[30];
     username = new JTextField("Email");
@@ -158,6 +124,8 @@ public class Ventana extends JFrame {
     mostrar = new JButton();
     ocultar = new JButton();
     String comp = "Password";
+    String contra_admin = "admin";
+
     username.setForeground(new Color(170,170,170));
     password.setForeground(new Color(170,170,170));
     password.setEchoChar((char)0);
@@ -166,6 +134,8 @@ public class Ventana extends JFrame {
     // usuario
     ImageIcon imageUser = new ImageIcon("src/user.png");
     JLabel userIcon = new JLabel(imageUser);
+
+ 
     userIcon.setIcon(new ImageIcon(imageUser.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
     userIcon.setVerticalAlignment(SwingConstants.CENTER);
     userIcon.setVisible(true);
@@ -182,7 +152,7 @@ public class Ventana extends JFrame {
     mostrar.setIcon(new ImageIcon(imagePass.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
     mostrar.setVerticalAlignment(SwingConstants.CENTER);
     mostrar.setVisible(true);
-    mostrar.setBackground(face);
+    mostrar.setBackground(new Color(255,128,0));
     mostrar.setFocusable(false);
     mostrar.setBorderPainted(false);
     mostrar.setBounds(medio+148, 250, 35, 35);
@@ -237,6 +207,7 @@ public class Ventana extends JFrame {
     MouseListener Jtexts = new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent me) {
+
         pass = "";
         for (int i = 0; i < password.getPassword().length; i++) {
           pass += password.getPassword()[i];
@@ -244,8 +215,10 @@ public class Ventana extends JFrame {
 
         if (username.getText().equals("Email")) {
           username.setText("");
+          username.setForeground(Color.black);
         } else if (pass.equals(comp)){
-          password.setText("");;
+          password.setText("");
+          password.setForeground(Color.black);
         }
 
       }
@@ -284,29 +257,63 @@ public class Ventana extends JFrame {
     password.setHorizontalAlignment(SwingConstants.CENTER);
     
     iniciar.setOpaque(true);
-    iniciar.setText("Log In");
+    iniciar.setText("iniciar");
     iniciar.setForeground(Color.WHITE);
     iniciar.setBorderPainted(false);
     iniciar.setFocusable(false);
     iniciar.setVisible(true);
     
 
-    iniciar.setBackground(login);
+    iniciar.setBackground(new Color(255,128,0));
     iniciar.setFont(new Font("arial",Font.BOLD,15));
     //iniciar.setBorder(BorderFactory.createLineBorder(Color.BLUE));
     
-    username.setBorder(BorderFactory.createLineBorder(new Color(66,92,178), 2, false));
-    password.setBorder(BorderFactory.createLineBorder(new Color(66,92,178), 2, false));
-    iniciar.setBorder(BorderFactory.createLineBorder(new Color(66,92,178), 2, false));
+    username.setBorder(BorderFactory.createLineBorder(new Color(255,128,0), 2, false));
+    password.setBorder(BorderFactory.createLineBorder(new Color(255,128,0), 2, false));
+    iniciar.setBorder(BorderFactory.createLineBorder(new Color(255,128,0), 2, false));
     
     username.setBounds(medio-150, 210, 300, 35);
     password.setBounds(medio-150, 250, 300, 35);
     iniciar.setBounds(medio-150, 310, 300, 35);
     
+
+    // Luego del inicio de sesion
     ActionListener empieza = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent ae) {
-        JOptionPane.showMessageDialog(null, " Helloooo vamos tu puedes");
+        /*if (username.getText() == "admin") {
+          JOptionPane.showMessageDialog(null, "Admin correcto");
+        }
+        else {
+          JOptionPane.showMessageDialog(null, "Admin incorrecto");
+        }*/
+        pass = "";
+
+        for (int i = 0; i < password.getPassword().length; i++) {
+          pass += password.getPassword()[i];
+        }
+
+        if (username.getText().equals("admin")) {
+
+          if (pass.equals(contra_admin)) {
+
+            setVisible(false);
+            Ventana2 admin_panel = new Ventana2();
+            admin_panel.setVisible(true);
+            admin_panel.setTitle("Panel de Administracion");
+            admin_panel.setResizable(false);
+            
+
+
+          }
+          else {
+            JOptionPane.showMessageDialog(null, "Su contraseña o usuario es incorrecot\nVuelva a intentarlo");
+          }
+        }
+        else {
+          JOptionPane.showMessageDialog(null, "Su contraseña o usuario es incorrecot\nVuelva a intentarlo");
+        }
+      
       }
     };
 
@@ -360,39 +367,75 @@ public class Ventana extends JFrame {
 
     username.addKeyListener(eventoTecla);
     password.addKeyListener(eventoTecla2);
+
     iniciar.addActionListener(empieza);
 
-    panel.add(username);
-    panel.add(password);
-    panel.add(iniciar);
-    panel.add(userIcon);
-    panel.add(mostrar);
+    fondo.add(username);
+    fondo.add(password);
+    fondo.add(iniciar);
+    fondo.add(userIcon);
+    fondo.add(mostrar);
   }
   public void registrarse() {
-    JButton registro = new JButton("Sing Up for FreeSale");
-    JButton recuperar = new JButton("Forgot Password");
+    JLabel registro = new JLabel("Crear cuenta");
+    JLabel recuperar = new JLabel("recuperar");
 
     // --------------------------
     registro.setLayout(null);
     registro.setFocusable(false);
-    registro.setBorderPainted(false);;
-    registro.setFont(new Font("arial",Font.PLAIN,12));
-    registro.setBackground(face);
+    //registro.setOpaque(true);
+  
+    registro.setFont(new Font("arial",Font.PLAIN,20));
+    
     // --------------------------
     
     recuperar.setLayout(null);
     recuperar.setFocusable(false);
-    recuperar.setBorderPainted(false);
-    recuperar.setFont(new Font("arial",Font.PLAIN,12));
-    recuperar.setBackground(face);
+   
+    
+    recuperar.setFont(new Font("arial",Font.PLAIN,20));
+  
     
 
     registro.setForeground(Color.WHITE);
     recuperar.setForeground(Color.WHITE);
 
-    registro.setBounds(medio-90, 480, 180, 20);
-    recuperar.setBounds(medio-70,540,140,20);
-    panel.add(registro);
-    panel.add(recuperar);
-  }
+    registro.setBounds(medio-90, 460, 180, 20);
+    recuperar.setBounds(medio-70,520,140,20);
+
+    MouseListener primerClick = new MouseListener() {
+      @Override
+      public void mouseClicked(MouseEvent me) {
+
+        registro.setOpaque(true);
+        registro.revalidate();
+        registro.repaint();
+        registro.setBackground(new Color(255,128,0));
+       
+      }
+      @Override
+      public void mousePressed(MouseEvent me) {
+        
+      }
+      @Override
+      public void mouseReleased(MouseEvent me) {
+        
+      }
+      @Override
+      public void mouseEntered(MouseEvent me) {
+
+      }
+      @Override
+      public void mouseExited(MouseEvent me) {
+       
+        registro.setOpaque(false);
+        registro.revalidate();
+        registro.repaint();
+
+      }
+    };
+    registro.addMouseListener(primerClick);
+    fondo.add(registro);
+    fondo.add(recuperar);
+   }
 }
