@@ -41,48 +41,5 @@ public class Conexion {
             System.err.println("No se pudo desconectar");
         }
     }
-    /*public static void main(String[] args) {
-      Pila id_pedido = new Pila();
-      Pila cantidad = new Pila();
-      Pila precio = new Pila();
-      PilaC tipo_plato = new PilaC();
-      
-      
-      Conexion mirar = new Conexion("pollo_panchita");
-      Statement st;
-      ResultSet rs;
-
-      try {
-          st = mirar.conectart().createStatement();
-          rs = st.executeQuery("select * from pedido");
-
-          while (rs.next()){
-            //System.out.println(rs.getInt("id_pedido")+" "+ rs.getString("tipo_plato")+" "+ rs.getInt("cantidad")+" "+ rs.getInt("precio"));
-            id_pedido.adicionar(rs.getInt("id_pedido"));
-            tipo_plato.adicionar(rs.getString("tipo_plato"));
-            cantidad.adicionar(rs.getInt("cantidad"));
-            precio.adicionar(rs.getInt("precio"));
-          }
-          mirar.conectart().close();
-          mirar.desconectar();
-        
-      } catch (Exception e) {
-          //TODO: handle exception
-      }
-
-      System.out.println("los id");
-      id_pedido.mostrar();
-      System.out.println();
-      System.out.println(" los platos");
-      tipo_plato.mostrar();
-      System.out.println();
-      System.out.println("cantidad");
-      cantidad.mostrar();
-      System.out.println();
-      System.out.println("precio");
-      precio.mostrar();
-
-    }*/
-    
 
 }
